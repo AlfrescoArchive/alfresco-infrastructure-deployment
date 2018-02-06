@@ -10,3 +10,15 @@ dependencies:
     version: ^0.1.0
     repository: https://alfresco.github.io/charts/incubator
     condition: activemq.enabled
+  - name: alfresco-keycloak
+    version: ^0.1.0
+    condition: alfresco-keycloak.enabled
+    repository: https://alfresco.github.io/charts/incubator
+  - name: alfresco-activiti-cloud-registry
+    version: ^0.1.0
+    condition: alfresco-activiti-cloud-registry.enabled
+    repository: https://alfresco.github.io/charts/incubator
+  - name: alfresco-api-gateway
+    version: ^0.1.0
+    condition: alfresco-api-gateway.enabled
+    repository: https://alfresco.github.io/charts/incubator
