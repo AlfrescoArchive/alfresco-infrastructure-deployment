@@ -8,5 +8,5 @@ dependencies:
     repository: https://kubernetes-charts.storage.googleapis.com
   - name: activemq
     version: ^0.1.0
-    repository: https://alfresco.github.io/charts-test/incubator
+    repository: https://alfresco.github.io/charts/incubator
     condition: activemq.enabled
