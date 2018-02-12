@@ -94,7 +94,7 @@ export NFSSERVER=fs-d660549f.efs.us-east-1.amazonaws.com
 ### 7. Deploy the infrastructure charts:
 ```bash
 
-helm repo add alfresco-infrastructure-test https://alfresco.github.io/charts/incubator
+helm repo add alfresco-infrastructure https://alfresco.github.io/charts/incubator
 
 helm dependency update alfresco-infrastructure
 
