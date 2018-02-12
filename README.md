@@ -1,8 +1,8 @@
-# Alfresco Digital Business Platform Infrastructure Deployment
+# Alfresco Infrastructure Deployment
 
 ## Prerequisites
 
-The Alfresco Digital Business Platform Infrastructre Deployment requires:
+The Alfresco Infrastructre Deployment requires:
 
 | Component        | Recommended version |
 | ------------- |:-------------:|
@@ -22,10 +22,10 @@ cd alfresco-infrastructure-deployment
 
 ### Kubernetes Cluster
 
-You can choose to deploy the DBP infrastructure to a local kubernetes cluster (illustrated using minikube) or you can choose to deploy to the cloud (illustrated using AWS).
+You can choose to deploy the infrastructure to a local kubernetes cluster (illustrated using minikube) or you can choose to deploy to the cloud (illustrated using AWS).
 Please check the Anaxes Shipyard documentation on [running a cluster](https://github.com/Alfresco/alfresco-anaxes-shipyard/blob/master/SECRETS.md).
 
-Note the DBP resource requirements:
+Note the resource requirements:
 * Minikube: At least 12 gigs of memory, i.e.:
 ```bash
 minikube start --memory 12000
@@ -49,45 +49,15 @@ kubectl create namespace $DESIREDNAMESPACE
 
 This environment variable will be used in the deployment steps.
 
-### Docker Registry Pull Secrets
-
-See the Anaxes Shipyard documentation on [secrets](https://github.com/Alfresco/alfresco-anaxes-shipyard/blob/master/SECRETS.md).
-
-Be sure to use the same namespace as above.
-
-*Note*: You can reuse the secrets.yaml file from charts/incubator directory. 
-
-```bash
-cd charts/incubator
-cat ~/.docker/config.json | base64
-```
-
-Add the base64 string generated to .dockerconfigjson in secrets.yaml. The file should look like this:
-
-```bash
-apiVersion: v1
-kind: Secret
-metadata:
-  name: quay-registry-secret
-type: kubernetes.io/dockerconfigjson
-data:
-# Docker registries config json in base64 to do this just run - cat ~/.docker/config.json | base64
-  .dockerconfigjson: ew0KCSJhdXRocyI6IHsNCgkJImh0dHBzOi8vcXVheS5pbyI6IHsNCgkJCSJhdXRoIjogImRHVnpkRHAwWlhOMD0iDQoJCX0sDQoJCSJxdWF5LmlvIjogew0KCQkJImF1dGgiOiAiZEdWemREcDBaWE4wIg0KCQl9DQoJfSwNCgkiSHR0cEhlYWRlcnMiOiB7DQoJCSJVc2VyLUFnZW50IjogIkRvY2tlci1DbGllbnQvMTcuMTIuMC1jZS1yYzMgKGRhcndpbikiDQoJfQ0KfQ==
-```
-
-Then run this command:
-
-```bash
-kubectl create -f secrets.yaml --namespace $DESIREDNAMESPACE
-```
-
 ## Deployment
 
 ### 1. Install the nginx-ingress-controller
 
 Install the nginx-ingress-controller into your cluster
 ```bash
-helm install stable/nginx-ingress --version 0.8.11 --namespace $DESIREDNAMESPACE
+helm install stable/nginx-ingress \
+--version 0.8.11 \
+--namespace $DESIREDNAMESPACE
 ```
 ### 2. Get the nginx-ingress-controller release name from the previous command and set it as a varible:
 ```bash
@@ -126,19 +96,19 @@ export NFSSERVER=fs-d660549f.efs.us-east-1.amazonaws.com
 
 helm repo add alfresco-infrastructure-test https://alfresco.github.io/charts/incubator
 
-helm dependency update alfresco-dbp-infrastructure
+helm dependency update alfresco-infrastructure
 
 #ON MINIKUBE
-helm install alfresco-dbp-infrastructure \
+helm install alfresco-infrastructure \
 --set alfresco-api-gateway.keycloakURL="http://$ELBADDRESS:$INFRAPORT/auth/" \
 --namespace $DESIREDNAMESPACE
 
 #ON AWS
-helm install alfresco-dbp-infrastructure \
+helm install alfresco-infrastructure \
 --set alfresco-api-gateway.keycloakURL="http://$ELBADDRESS:$INFRAPORT/auth/" \
---namespace $DESIREDNAMESPACE \
 --set persistence.volumeEnv=aws \
 --set persistence.nfs.server="$NFSSERVER"
+--namespace $DESIREDNAMESPACE
 ```
 
 ### 8. Get the infrastructure release name from the previous command and set it as a variable:
