@@ -116,7 +116,7 @@ helm install alfresco-infrastructure \
 export INFRARELEASE=enervated-deer
 ```
 
-### 9. Wait for the infrastructure release to get deployed.  When checking status all your pods should be READY 1/1):
+### 9. Wait for the infrastructure release to get deployed. (When checking status all your pods should be READY 1/1):
 ```bash
 helm status $INFRARELEASE
 ```
