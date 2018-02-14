@@ -96,18 +96,16 @@ export NFSSERVER=fs-d660549f.efs.us-east-1.amazonaws.com
 
 helm repo add alfresco-incubator https://alfresco.github.io/charts/incubator
 
-helm dependency update alfresco-infrastructure
-
 #ON MINIKUBE
-helm install alfresco-infrastructure \
+helm install alfresco-incubator/alfresco-infrastructure \
 --set alfresco-api-gateway.keycloakURL="http://$ELBADDRESS:$INFRAPORT/auth/" \
 --namespace $DESIREDNAMESPACE
 
 #ON AWS
-helm install alfresco-infrastructure \
+helm install alfresco-incubator/alfresco-infrastructure \
 --set alfresco-api-gateway.keycloakURL="http://$ELBADDRESS:$INFRAPORT/auth/" \
 --set persistence.volumeEnv=aws \
---set persistence.nfs.server="$NFSSERVER"
+--set persistence.nfs.server="$NFSSERVER" \
 --namespace $DESIREDNAMESPACE
 ```
 
