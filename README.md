@@ -64,7 +64,7 @@ helm install stable/nginx-ingress \
 export INGRESSRELEASE=knobby-wolf
 ```
 
-### 3. Wait for the nginx-ingress-controller release to get deployed.  When checking status your pod should be READY 1/1):
+### 3. Wait for the nginx-ingress-controller release to get deployed (When checking status your pod should be READY 1/1):
 ```bash
 helm status $INGRESSRELEASE
 ```
