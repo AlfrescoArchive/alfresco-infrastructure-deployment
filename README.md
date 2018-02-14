@@ -103,7 +103,7 @@ helm install alfresco-incubator/alfresco-infrastructure \
 
 #ON AWS
 helm install alfresco-incubator/alfresco-infrastructure \
---set alfresco-api-gateway.keycloakURL="http://$ELBADDRESS:$INFRAPORT/auth/" \
+--set alfresco-api-gateway.keycloakURL="http://$ELBADDRESS/auth/" \
 --set persistence.volumeEnv=aws \
 --set persistence.nfs.server="$NFSSERVER" \
 --namespace $DESIREDNAMESPACE
