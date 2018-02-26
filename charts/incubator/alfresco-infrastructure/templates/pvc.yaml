@@ -1,4 +1,10 @@
 {{- if and .Values.persistence.efs.enabled (not .Values.persistence.existingVolume) -}}
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: efs
+provisioner: alfresco.com/efs
+---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
