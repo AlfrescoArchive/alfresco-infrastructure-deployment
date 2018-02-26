@@ -9,8 +9,8 @@ rabbitmq-ha:
 
 persistence:
   efs:
-    enabled: true
-    dns: fs-6570472c.efs.us-east-1.amazonaws.com #For aws you will need to specify the EFS server
+    enabled: false
+    dns: fs-example.efs.us-east-1.amazonaws.com #For aws you will need to specify the EFS server
     path: "/"
   baseSize: 10Gi
 
