@@ -5,14 +5,14 @@ rabbitmq-ha:
     create: false
   persistence:
     enabled: false
-    size: 10Gi
+    size: 3Gi
 
 persistence:
-  enabled: false
-  size: 3Gi
-  volumeEnv: minikube #Choose between aws and minikube
-  nfs:
-    server: fs-6570472c.efs.us-east-1.amazonaws.com #For aws you will need to specify the EFS server
+  efs:
+    enabled: true
+    dns: fs-6570472c.efs.us-east-1.amazonaws.com #For aws you will need to specify the EFS server
+    path: "/"
+  baseSize: 10Gi
 
 activemq:
   enabled: true
