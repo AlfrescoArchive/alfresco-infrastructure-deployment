@@ -1,4 +1,4 @@
-{{- if and .Values.persistence.efs.enabled (not .Values.persistence.existingVolume) -}}
+{{- if and .Values.persistence.efs.enabled (not .Values.persistence.existingClaim) -}}
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -14,10 +14,21 @@ spec:
     storage: {{ .Values.persistence.baseSize | quote }}
   accessModes:
     - ReadWriteMany
-    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: {{ .Values.persistence.reclaimPolicy | default "Delete" }}
   nfs:
     server: "{{ .Values.persistence.efs.dns }}"
     path: "{{ .Values.persistence.efs.path }}"
   storageClassName: efs
 ---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: alfresco-volume-claim
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: efs
+  resources:
+    requests:
+      storage: {{ .Values.persistence.baseSize | quote }}
 {{- end -}}
