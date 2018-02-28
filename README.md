@@ -15,10 +15,6 @@ Any variation from these technologies and versions may affect the end result. If
 
 After you have installed the prerequisites please run the following commands:
 
-```bash
-git clone https://github.com/Alfresco/alfresco-infrastructure-deployment.git
-cd alfresco-infrastructure-deployment
-```
 
 ### Kubernetes Cluster
 
@@ -94,7 +90,7 @@ export NFSSERVER=fs-d660549f.efs.us-east-1.amazonaws.com
 ### 7. Deploy the infrastructure charts:
 ```bash
 
-helm repo add alfresco-incubator https://alfresco.github.io/charts/incubator
+helm repo add alfresco-incubator http://kubernetes-charts.alfresco.com/incubator
 
 #ON MINIKUBE
 helm install alfresco-incubator/alfresco-infrastructure \
