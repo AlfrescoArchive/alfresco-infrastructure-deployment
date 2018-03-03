@@ -51,6 +51,7 @@ This environment variable will be used in the deployment steps.
 
 Install the nginx-ingress-controller into your cluster
 ```bash
+helm repo update
 helm install stable/nginx-ingress \
 --version 0.8.11 \
 --namespace $DESIREDNAMESPACE
