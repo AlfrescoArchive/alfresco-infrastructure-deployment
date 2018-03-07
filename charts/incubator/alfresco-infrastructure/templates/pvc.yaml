@@ -1,34 +1,40 @@
-{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
-{{- if eq .Values.persistence.volumeEnv "aws" -}}
+{{- if .Values.persistence.enabled -}}
+{{- if .Values.persistence.efs.enabled }}
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: efs
+provisioner: alfresco.com/efs
+---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: alfresco-volume
 spec:
   capacity:
-    storage: 10Gi
+    storage: {{ .Values.persistence.baseSize | quote }}
   accessModes:
     - ReadWriteMany
+  persistentVolumeReclaimPolicy: {{ .Values.persistence.reclaimPolicy | default "Recycle" }}
   nfs:
-    server: "{{ .Values.persistence.nfs.server }}"
-    path: "/"
+    server: "{{ .Values.persistence.efs.dns }}"
+    path: "{{ .Values.persistence.efs.path }}"
   storageClassName: efs
 ---
-{{- end -}}
+{{- end }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: alfresco-volume-claim
 spec:
   accessModes:
-  {{ if eq .Values.persistence.volumeEnv "aws" }}
+  {{ if .Values.persistence.efs.enabled }}
     - ReadWriteMany
   storageClassName: efs
-  volumeName: alfresco-volume
   {{ else }}
     - ReadWriteOnce
   {{ end }}
   resources:
     requests:
-      storage: {{ .Values.persistence.size | quote }}
-{{- end }}
+      storage: {{ .Values.persistence.baseSize | quote }}
+{{- end -}}

@@ -88,6 +88,14 @@ Create a EFS storage on AWS and make sure it is in the same VPC as your cluster.
 export NFSSERVER=fs-d660549f.efs.us-east-1.amazonaws.com
 ```
 
+***Note!***
+The Persistent volume created with NFS to store the data on the created EFS has the ReclaimPolicy set to Recycle.
+This means that by default, when you delete the release the saved data is deleted automatically.
+
+To change this behaviour and keep the data you can set the persistence.reclaimPolicy value to Retain.
+
+For more Information on Reclaim Policies checkout the official K8S documentation here -> https://kubernetes.io/docs/concepts/storage/persistent-volumes/#reclaim-policy
+
 ### 7. Deploy the infrastructure charts:
 ```bash
 
@@ -101,8 +109,8 @@ helm install alfresco-incubator/alfresco-infrastructure \
 #ON AWS
 helm install alfresco-incubator/alfresco-infrastructure \
 --set alfresco-api-gateway.keycloakURL="http://$ELBADDRESS/auth/" \
---set persistence.volumeEnv=aws \
---set persistence.nfs.server="$NFSSERVER" \
+--set persistence.efs.enabled=true \
+--set persistence.efs.dns="$NFSSERVER" \
 --namespace $DESIREDNAMESPACE
 ```
 
@@ -128,4 +136,4 @@ For minikube you can just run
 ```bash
 minikube delete
 ```
-For more information on running and tearing down k8s environemnts, follow this [guide](https://github.com/Alfresco/alfresco-anaxes-shipyard/blob/master/docs/running-a-cluster.md).
+For more information on running and tearing down k8s environments, follow this [guide](https://github.com/Alfresco/alfresco-anaxes-shipyard/blob/master/docs/running-a-cluster.md).
