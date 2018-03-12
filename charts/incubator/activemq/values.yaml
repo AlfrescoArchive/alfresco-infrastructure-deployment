@@ -29,3 +29,8 @@ activemq:
           webConsole: 8161
       name: activemq-web-console
       type: NodePort
+
+persistence:
+  existingClaim: "alfresco-volume-claim"
+  mountPath: "/data"
+  subPath: "alfresco-infrastructure/activemq-data"
