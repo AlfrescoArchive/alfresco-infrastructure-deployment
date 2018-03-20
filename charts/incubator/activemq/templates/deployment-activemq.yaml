@@ -41,5 +41,13 @@ spec:
             port: {{ .Values.activemq.services.broker.ports.internal.openwire | default 61616 }}
           initialDelaySeconds: 5
           periodSeconds: 25
+        volumeMounts:
+        - name: data
+          mountPath: {{ .Values.persistence.mountPath }}
+          subPath: {{ .Values.persistence.subPath }}
         resources:
 {{ toYaml .Values.activemq.resources | indent 12 }}
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ .Values.persistence.existingClaim }}
