@@ -9,7 +9,7 @@ The Alfresco Infrastructre Deployment requires:
 | Docker     | 17.0.9.1 |
 | Kubernetes | 1.8.0    |
 | Helm       | 2.7.0    |
-| Minikube   | 0.24.1   |
+| Minikube   | 0.25.0   |
 
 Any variation from these technologies and versions may affect the end result. If you do experience any issues please let us know through our [Gitter channel](https://gitter.im/Alfresco/platform-services?utm_source=share-link&utm_medium=link&utm_campaign=share-link).
 
