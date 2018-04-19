@@ -106,12 +106,12 @@ helm repo add alfresco-incubator http://kubernetes-charts.alfresco.com/incubator
 
 #ON MINIKUBE
 helm install alfresco-incubator/alfresco-infrastructure \
---set alfresco-api-gateway.keycloakURL="http://$ELBADDRESS:$INFRAPORT/auth/" \
+--set alfresco-api-gateway.keycloakURL="https://$ELBADDRESS:$INFRAPORT/auth/" \
 --namespace $DESIREDNAMESPACE
 
 #ON AWS
 helm install alfresco-incubator/alfresco-infrastructure \
---set alfresco-api-gateway.keycloakURL="http://$ELBADDRESS/auth/" \
+--set alfresco-api-gateway.keycloakURL="https://$ELBADDRESS/auth/" \
 --set persistence.efs.enabled=true \
 --set persistence.efs.dns="$NFSSERVER" \
 --namespace $DESIREDNAMESPACE
