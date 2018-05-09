@@ -191,8 +191,8 @@ helm status $INFRARELEASE
 ### 10. Teardown:
 
 ```bash
-helm delete $INGRESSRELEASE
-helm delete $INFRARELEASE
+helm delete --purge $INGRESSRELEASE
+helm delete --purge $INFRARELEASE
 kubectl delete namespace $DESIREDNAMESPACE
 ```
 Depending on your cluster type you should be able to also delete it if you want.
