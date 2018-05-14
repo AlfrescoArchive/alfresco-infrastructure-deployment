@@ -31,14 +31,8 @@ alfresco-api-gateway:
   enabled: true
 alfresco-identity-service:
   enabled: true
-  postgresql:
-    nameOverride: postgresql-id
-    imageTag: "10.1"
-    persistence:
-      existingClaim: "alfresco-volume-claim"
-      subPath: "alfresco-identity-service/database-data"
-    resources:
-      requests:
-        memory: "250Mi"
-      limits:
-        memory: "500Mi"
+  keycloak:
+    postgresql:
+      persistence:
+        existingClaim: "alfresco-volume-claim"
+        subPath: "alfresco-identity-service/database-data"
