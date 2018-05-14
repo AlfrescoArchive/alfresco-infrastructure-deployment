@@ -16,6 +16,6 @@ dependencies:
     condition: alfresco-infrastructure.alfresco-activiti-cloud-registry.enabled
     repository: http://kubernetes-charts.alfresco.com/incubator
   - name: alfresco-api-gateway
-    version: ^0.1.0
+    version: 0.1.0-AUTH-118
     condition: alfresco-infrastructure.alfresco-api-gateway.enabled
     repository: http://kubernetes-charts.alfresco.com/incubator
