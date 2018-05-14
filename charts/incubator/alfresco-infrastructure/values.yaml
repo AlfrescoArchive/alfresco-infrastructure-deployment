@@ -31,8 +31,3 @@ alfresco-api-gateway:
   enabled: true
 alfresco-identity-service:
   enabled: true
-  keycloak:
-    postgresql:
-      persistence:
-        existingClaim: "alfresco-volume-claim"
-        subPath: "alfresco-identity-service/database-data"
