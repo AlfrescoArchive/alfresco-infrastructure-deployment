@@ -164,13 +164,13 @@ For more Information on Reclaim Policies checkout the official K8S documentation
 ```bash
 
 helm repo add alfresco-incubator http://kubernetes-charts.alfresco.com/incubator
-
 #ON MINIKUBE
 helm install alfresco-incubator/alfresco-infrastructure \
 --set alfresco-api-gateway.keycloakURL="http://$ELBADDRESS:$INFRAPORT/auth/" \
 --namespace $DESIREDNAMESPACE
 
 #ON AWS
+# Remember to use https here if you have a trusted certificate set on the ingress
 helm install alfresco-incubator/alfresco-infrastructure \
 --set alfresco-api-gateway.keycloakURL="http://$ELBADDRESS/auth/" \
 --set persistence.efs.enabled=true \

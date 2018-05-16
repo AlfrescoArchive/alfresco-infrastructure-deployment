@@ -7,15 +7,15 @@ dependencies:
     version: ^0.1.0
     repository: http://kubernetes-charts.alfresco.com/incubator
     condition: alfresco-infrastructure.activemq.enabled
-  - name: alfresco-keycloak
-    version: ^0.1.0
-    condition: alfresco-infrastructure.alfresco-keycloak.enabled
+  - name: alfresco-identity-service
+    version: ^0.2
+    condition: alfresco-infrastructure.alfresco-identity-service.enabled
     repository: http://kubernetes-charts.alfresco.com/incubator
   - name: alfresco-activiti-cloud-registry
     version: ^0.1.0
     condition: alfresco-infrastructure.alfresco-activiti-cloud-registry.enabled
     repository: http://kubernetes-charts.alfresco.com/incubator
   - name: alfresco-api-gateway
-    version: ^0.1.0
+    version: 0.1.0-AUTH-118
     condition: alfresco-infrastructure.alfresco-api-gateway.enabled
     repository: http://kubernetes-charts.alfresco.com/incubator

@@ -29,5 +29,5 @@ alfresco-activiti-cloud-registry:
     enabled: false
 alfresco-api-gateway:
   enabled: true
-alfresco-keycloak:
+alfresco-identity-service:
   enabled: true
