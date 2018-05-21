@@ -14,7 +14,6 @@ This chart bootstraps the creation of a persistent volume and persistent volume 
 | Docker     | 17.0.9.1 |
 | Kubernetes | 1.8.4    |
 | Helm       | 2.8.2    |
-| Minikube   | 0.25.0   |
 
 Any variation from these technologies and versions may affect the end result. If you do experience any issues please let us know through our [Gitter channel](https://gitter.im/Alfresco/platform-services?utm_source=share-link&utm_medium=link&utm_campaign=share-link).
 
@@ -80,11 +79,7 @@ helm delete --purge $INGRESSRELEASE
 helm delete --purge $INFRARELEASE
 kubectl delete namespace $DESIREDNAMESPACE
 ```
-Depending on your cluster type you should be able to also delete it if you want.
-For minikube you can just run
-```bash
-minikube delete
-```
+
 For more information on running and tearing down k8s environments, follow this [guide](https://github.com/Alfresco/alfresco-anaxes-shipyard/blob/master/docs/running-a-cluster.md).
 
 
