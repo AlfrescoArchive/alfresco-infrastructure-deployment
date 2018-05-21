@@ -20,22 +20,8 @@ Any variation from these technologies and versions may affect the end result. If
 
 ### Kubernetes Cluster
 
-You can choose to deploy the infrastructure to a local kubernetes cluster (illustrated using minikube) or you can choose to deploy to the cloud (illustrated using AWS).
 Please check the Anaxes Shipyard documentation on [running a cluster](https://github.com/Alfresco/alfresco-anaxes-shipyard/blob/master/SECRETS.md).
 
-Note the resource requirements:
-* Minikube: At least 12 gigs of memory, i.e.:
-```bash
-minikube start --memory 12000
-```
-* AWS: A VPC and cluster with 5 nodes. Each node should be a m4.xlarge EC2 instance.
-
-### Helm Tiller
-
-Initialize the Helm Tiller:
-```bash
-helm init
-```
 
 ### K8s Cluster Namespace
 
@@ -69,12 +55,8 @@ For more Information on Reclaim Policies checkout the official K8S documentation
 ```bash
 
 helm repo add alfresco-incubator http://kubernetes-charts.alfresco.com/incubator
-#ON MINIKUBE
-helm install alfresco-incubator/alfresco-infrastructure \
---namespace $DESIREDNAMESPACE
 
-#ON AWS
-# Remember to use https here if you have a trusted certificate set on the ingress
+
 helm install alfresco-incubator/alfresco-infrastructure \
 --set persistence.efs.enabled=true \
 --set persistence.efs.dns="$NFSSERVER" \
