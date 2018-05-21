@@ -106,7 +106,7 @@ minikube delete
 For more information on running and tearing down k8s environments, follow this [guide](https://github.com/Alfresco/alfresco-anaxes-shipyard/blob/master/docs/running-a-cluster.md).
 
 
-### Configuration
+## Configuration
 The following table lists the configurable parameters of the infrastructure chart and their default values.
 
 
