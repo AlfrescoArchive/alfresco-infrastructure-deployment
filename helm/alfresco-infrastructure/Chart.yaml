@@ -1,0 +1,4 @@
+apiVersion: v1
+description: A Helm chart Providing the required Alfresco infrastructure. This includes activemq, alfresco-api-gateway, alfresco-identity-service, and a persistent volume to use with the dbp chart.
+name: alfresco-infrastructure
+version: 1.1.0-SNAPSHOT
