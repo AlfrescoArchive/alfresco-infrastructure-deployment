@@ -1,0 +1,13 @@
+#Persistence options
+persistence:
+  #Enables the creation of a persistent volume
+  enabled: true
+  efs:
+    #Enables EFS ussage
+    enabled: false
+    #DNS address of EFS
+    dns: fs-example.efs.us-east-1.amazonaws.com
+    #Base path to use within the EFS that is mounted as a volume
+    path: "/"
+  #Size allocated to the volume in K8S
+  baseSize: 20Gi
