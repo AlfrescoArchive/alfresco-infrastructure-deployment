@@ -25,6 +25,8 @@ spec:
         - name: ACTIVEMQ_CONFIG_MAXMEMORY
           value: "{{ .Values.activemq.image.configMaxMemory }}"
         ports:
+        - name: stomp
+          containerPort: {{ .Values.activemq.services.broker.ports.internal.stomp | default 61613 }}
         - name: openwire
           containerPort: {{ .Values.activemq.services.broker.ports.internal.openwire | default 61616 }}
         - name: amqp
