@@ -14,11 +14,13 @@ activemq:
     broker:
       ports:
         internal:
+          stomp: 61613
           amqp: 5672
           openwire: 61616
         external:
+          stomp: 61613
           amqp: 5672
-          openwire: 61616        
+          openwire: 61616      
       name: activemq-broker
       type: ClusterIP
     webConsole:
