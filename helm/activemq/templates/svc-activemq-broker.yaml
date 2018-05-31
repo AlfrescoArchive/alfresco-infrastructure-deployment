@@ -10,8 +10,8 @@ metadata:
 spec:
   type: {{ .Values.activemq.services.broker.type }}
   ports:
-  - port: {{ .Values.activemq.services.broker.ports.external.openwire | default 61613 }}
-    targetPort: {{ .Values.activemq.services.broker.ports.internal.openwire | default 61613 }}
+  - port: {{ .Values.activemq.services.broker.ports.external.stomp | default 61613 }}
+    targetPort: {{ .Values.activemq.services.broker.ports.internal.stomp | default 61613 }}
     name: stomp
     protocol: TCP
   - port: {{ .Values.activemq.services.broker.ports.external.openwire | default 61616 }}
