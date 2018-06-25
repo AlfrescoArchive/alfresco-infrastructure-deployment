@@ -13,8 +13,8 @@ persistence:
   baseSize: 20Gi
 
 nginx-ingress:
-  config:
-    ssl-redirect: "false"
   controller:
+    config:
+      ssl-redirect: "false"
     scope:
       enabled: true
