@@ -96,8 +96,8 @@ nginx-ingress:
 
 If you want to customize the SSL certificate on the ingress level you can choose one of the options below:
 
-<details><summary>
-### Option 1
+<details>
+<summary>Option 1</summary>
 <p>
 
 If you want your own certificate set on the ELB created through AWS you should create a secret from your cert files:
@@ -140,14 +140,13 @@ EOF
 helm install alfresco-incubator/alfresco-infrastructure \
 -f infravalues.yaml \
 --namespace $DESIREDNAMESPACE
-
 ```
 
 </p>
 </details>
 
-<details><summary>
-### Option 2
+<details>
+<summary>Option 2</summary>
 <p>
 
 If you
