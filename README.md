@@ -161,7 +161,7 @@ the SSL/TLS certificate to the ELB.
 
 _Note: AWS Certificate Manager ARNs are of the form `arn:aws:acm:REGION:ACCOUNT:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`._
 
-Set `DOMAIN` to the DNS Zone you used when [creating the cluster](https://github.com/kubernetes/kops/blob/master/docs/aws.md#scenario-1b-a-subdomain-under-a-domain-purchasedhosted-via-aws).
+Set `DOMAIN` to the DNS Zone you have in AWS
 
 ```bash
 ELB_CNAME="${DESIREDNAMESPACE}.${DOMAIN}"
