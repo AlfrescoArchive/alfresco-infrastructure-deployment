@@ -159,6 +159,8 @@ Kubernetes' [External DNS](https://github.com/kubernetes-incubator/external-dns)
 can autogenerate a DNS entry for you (a CNAME of the generated ELB) and apply
 the SSL/TLS certificate to the ELB.
 
+_Note: External DNS is currenty in Alpha Version - June 2018_
+
 _Note: AWS Certificate Manager ARNs are of the form `arn:aws:acm:REGION:ACCOUNT:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`._
 
 Set `DOMAIN` to the DNS Zone you have in AWS
