@@ -11,3 +11,10 @@ persistence:
     path: "/"
   #Size allocated to the volume in K8S
   baseSize: 20Gi
+
+nginx-ingress:
+  controller:
+    config:
+      ssl-redirect: "false"
+    scope:
+      enabled: true
