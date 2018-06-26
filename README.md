@@ -151,9 +151,9 @@ helm install alfresco-incubator/alfresco-infrastructure \
 
 If you
 
-* created the cluster in AWS using [kops](https://github.com/kubernetes/kops/)
-* have a matching SSL/TLS certificate stored in [AWS Certificate Manager](https://aws.amazon.com/certificate-manager/)
-* are using a zone in [Amazon Route 53](https://aws.amazon.com/route53/)
+* Created the cluster in AWS
+* Have a matching SSL/TLS certificate stored in [AWS Certificate Manager](https://aws.amazon.com/certificate-manager/)
+* Are using a zone in [Amazon Route 53](https://aws.amazon.com/route53/)
 
 Kubernetes' [External DNS](https://github.com/kubernetes-incubator/external-dns)
 can autogenerate a DNS entry for you (a CNAME of the generated ELB) and apply
