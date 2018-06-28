@@ -222,31 +222,10 @@ EOF
 helm install alfresco-incubator/alfresco-infrastructure \
 -f infravalues.yaml \
 --namespace $DESIREDNAMESPACE
+```
 
 </p>
 </details>
-
-<!-- markdownlint-disable MD029 -->
-6. Get the infrastructure release name from the previous command and set it as a variable
-<!-- markdownlint-enable MD029 -->
-
-```bash
-export INFRARELEASE=enervated-deer
-```
-
-<!-- markdownlint-disable MD029 -->
-7. Wait for the infrastructure release to get deployed. (When checking status all your pods should be READY 1/1)
-<!-- markdownlint-enable MD029 -->
-
-```bash
-helm status $INFRARELEASE
-```
-
-<!-- markdownlint-disable MD029 -->
-8. Teardown
-<!-- markdownlint-enable MD029 -->
-For more information on running and tearing down k8s environments, follow this [guide](https://github.com/Alfresco/alfresco-anaxes-shipyard/blob/master/docs/running-a-cluster.md).
-
 
 For additional information on customizing the nginx-ingress chart please refer to the [nginx-ingress chart Readme](https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress)
 
