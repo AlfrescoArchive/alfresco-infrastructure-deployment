@@ -21,7 +21,9 @@ activemq:
 nginx-ingress:
   controller:
     scope:
-      enabled: true
+      enabled: true  
+    config:
+      ssl-redirect: "false"
 
 alfresco-activiti-cloud-registry:
   enabled: true

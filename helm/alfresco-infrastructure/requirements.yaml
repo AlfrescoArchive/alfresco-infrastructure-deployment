@@ -19,3 +19,6 @@ dependencies:
     version: 0.1.1
     condition: alfresco-infrastructure.alfresco-api-gateway.enabled
     repository: https://kubernetes-charts.alfresco.com/incubator
+  - name: nginx-ingress
+    epository: https://kubernetes-charts.storage.googleapis.com/
+    version: 0.14.0
