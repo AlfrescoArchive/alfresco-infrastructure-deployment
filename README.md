@@ -15,9 +15,14 @@ Beside this it will bring in the following components of the dbp:
 |alfresco-activiti-cloud-registry | ^0.1.0 |
 |alfresco-api-gateway | 0.1.1 |
 
-## Prerequisites
+The Alfresco Infrastructure chart aims at bringing in components that will commonly be used by the majority of applications within the Digital Business Platforms.
 
-The Alfresco Infrastructre Deployment requires:
+# Introduction
+
+This chart bootstraps the creation of a persistent volume and persistent volume claim on a [Kubernetes](http://kubernetes.io)cluster using the [Helm](https://helm.sh) package manager.
+In addition it deploys the nginx-ingress chart which consists in an Ingress Controler that uses ConfigMaps to store nginx configuration.
+
+## Prerequisites
 
 | Component        | Recommended version |
 | ------------- |:-------------:|
@@ -58,152 +63,29 @@ To change this behaviour and keep the data you can set the persistence.reclaimPo
 
 ## Installing the chart
 
-1. Install the nginx-ingress-controller
-
-```bash
-helm repo update
-
-cat <<EOF > ingressvalues.yaml
-controller:
-  config:
-    ssl-redirect: "false"
-  scope:
-    enabled: true
-EOF
-
-helm install stable/nginx-ingress --version=0.14.0 -f ingressvalues.yaml \
-  --namespace $DESIREDNAMESPACE
-```
-
-### Optional
-
-If you want your own certificate set here you should create a secret from your cert files:
-
-```bash
-kubectl create secret tls certsecret --key /tmp/tls.key --cert /tmp/tls.crt \
-  --namespace $DESIREDNAMESPACE
-
-#Then deploy the ingress with following settings
-
-cat <<EOF > ingressvalues.yaml
-controller:
-  config:
-    ssl-redirect: "false"
-  scope:
-    enabled: true
-  publishService:
-    enabled: true
-  extraArgs:
-    default-ssl-certificate: $DESIREDNAMESPACE/certsecret
-EOF
-
-helm install stable/nginx-ingress --version=0.14.0 -f ingressvalues.yaml \
-  --namespace $DESIREDNAMESPACE
-```
-
-If you
-
-* created the cluster in AWS using [kops](https://github.com/kubernetes/kops/)
-* have a matching SSL/TLS certificate stored in [AWS Certificate Manager](https://aws.amazon.com/certificate-manager/)
-* are using a zone in [Amazon Route 53](https://aws.amazon.com/route53/)
-
-Kubernetes' [External DNS](https://github.com/kubernetes-incubator/external-dns)
-can autogenerate a DNS entry for you (a CNAME of the generated ELB) and apply
-the SSL/TLS certificate to the ELB.
-
-_Note: AWS Certificate Manager ARNs are of the form `arn:aws:acm:REGION:ACCOUNT:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`._
-
-Set `DOMAIN` to the DNS Zone you used when [creating the cluster](https://github.com/kubernetes/kops/blob/master/docs/aws.md#scenario-1b-a-subdomain-under-a-domain-purchasedhosted-via-aws).
-
-```bash
-ELB_CNAME="${DESIREDNAMESPACE}.${DOMAIN}"
-ELB_CERTIFICATE_ARN=$(aws acm list-certificates | \
-  jq '.CertificateSummaryList[] | select (.DomainName == "'${DOMAIN}'") | .CertificateArn')
-
-cat <<EOF > ingressvalues.yaml
-controller:
-  config:
-    ssl-redirect: "false"
-  scope:
-    enabled: true
-  publishService:
-    enabled: true
-  service:
-    targetPorts:
-      http: http
-      https: http
-    annotations:
-      external-dns.alpha.kubernetes.io/hostname: ${ELB_CNAME}
-      service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
-      service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: '3600'
-      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: ${ELB_CERTIFICATE_ARN}
-      service.beta.kubernetes.io/aws-load-balancer-ssl-ports: https
-EOF
-
-helm install stable/nginx-ingress --version=0.14.0 -f ingressvalues.yaml \
-  --namespace $DESIREDNAMESPACE
-
-```
-
-<!-- markdownlint-disable MD029 -->
-2. Get the nginx-ingress-controller release name from the previous command and set it as a varible:
-<!-- markdownlint-disable MD029 -->
-
-```bash
-export INGRESSRELEASE=knobby-wolf
-```
-
-<!-- markdownlint-disable MD029 -->
-3. Wait for the nginx-ingress-controller release to get deployed (When checking status your pod should be READY 1/1):
-<!-- markdownlint-enable MD029 -->
-
-```bash
-helm status $INGRESSRELEASE
-```
-
-<!-- markdownlint-disable MD029 -->
-4. Get the ELB IP and set it as a variable for future use:
-<!-- markdownlint-enable MD029 -->
-
-```bash
-export ELBADDRESS=$(kubectl get services $INGRESSRELEASE-nginx-ingress-controller --namespace=$DESIREDNAMESPACE -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-```
-
-<!-- markdownlint-disable MD029 -->
-5. Deploy the infrastructure charts
-<!-- markdownlint-enable MD029 -->
-
+### 1. Deploy the infrastructure charts:
 ```bash
 
 helm repo add alfresco-incubator http://kubernetes-charts.alfresco.com/incubator
 
-# Remember to use https here if you have a trusted certificate set on the ingress
+
 helm install alfresco-incubator/alfresco-infrastructure \
---set alfresco-api-gateway.keycloakURL="http://$ELBADDRESS/auth/" \
 --set persistence.efs.enabled=true \
 --set persistence.efs.dns="$NFSSERVER" \
 --namespace $DESIREDNAMESPACE
 ```
 
-<!-- markdownlint-disable MD029 -->
-6. Get the infrastructure release name from the previous command and set it as a variable
-<!-- markdownlint-enable MD029 -->
-
+### 2. Get the infrastructure release name from the previous command and set it as a variable:
 ```bash
 export INFRARELEASE=enervated-deer
 ```
 
-<!-- markdownlint-disable MD029 -->
-7. Wait for the infrastructure release to get deployed. (When checking status all your pods should be READY 1/1)
-<!-- markdownlint-enable MD029 -->
-
+### 3. Wait for the infrastructure release to get deployed. (When checking status all your pods should be READY 1/1):
 ```bash
 helm status $INFRARELEASE
 ```
 
-<!-- markdownlint-disable MD029 -->
-8. Teardown
-<!-- markdownlint-enable MD029 -->
+### 4. Teardown:
 
 ```bash
 helm delete --purge $INGRESSRELEASE
@@ -213,9 +95,144 @@ kubectl delete namespace $DESIREDNAMESPACE
 
 For more information on running and tearing down k8s environments, follow this [guide](https://github.com/Alfresco/alfresco-anaxes-shipyard/blob/master/docs/running-a-cluster.md).
 
-## Configuration
+## Nginx-ingress Custom Configuration
 
+By default, this chart deploys the [nginx-ingress chart](https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress) with the following configuration:
+
+```yaml
+nginx-ingress:
+  config:
+    ssl-redirect: "false"
+  controller:
+    scope:
+      enabled: true
+```
+
+If you want to customize the SSL certificate on the ingress level you can choose one of the options below:
+
+<details>
+<summary>Option 1</summary>
+<p>
+
+If you want your own certificate set on the ELB created through AWS you should create a secret from your cert files:
+
+```bash
+kubectl create secret tls certsecret --key /tmp/tls.key --cert /tmp/tls.crt \
+  --namespace $DESIREDNAMESPACE
+```
+
+Then deploy the infrastructure with following settings:
+
+```bash
+cat <<EOF > infravalues.yaml
+#Persistence options
+persistence:
+  #Enables the creation of a persistent volume
+  enabled: true
+  efs:
+    #Enables EFS ussage
+    enabled: false
+    #DNS address of EFS
+    dns: fs-example.efs.us-east-1.amazonaws.com
+    #Base path to use within the EFS that is mounted as a volume
+    path: "/"
+  #Size allocated to the volume in K8S
+  baseSize: 20Gi
+
+nginx-ingress:
+  controller:
+    config:
+      ssl-redirect: "false"
+    scope:
+      enabled: true
+    publishService:
+      enabled: true
+    extraArgs:
+      default-ssl-certificate: $DESIREDNAMESPACE/certsecret
+EOF
+
+helm install alfresco-incubator/alfresco-infrastructure \
+-f infravalues.yaml \
+--namespace $DESIREDNAMESPACE
+```
+
+</p>
+</details>
+
+
+<details>
+<summary>Option 2</summary>
+<p>
+
+If you
+
+* Created the cluster in AWS
+* Have a matching SSL/TLS certificate stored in [AWS Certificate Manager](https://aws.amazon.com/certificate-manager/)
+* Are using a zone in [Amazon Route 53](https://aws.amazon.com/route53/)
+
+Kubernetes' [External DNS](https://github.com/kubernetes-incubator/external-dns)
+can autogenerate a DNS entry for you (a CNAME of the generated ELB) and apply
+the SSL/TLS certificate to the ELB.
+
+_Note: External DNS is currenty in Alpha Version - June 2018_
+
+_Note: AWS Certificate Manager ARNs are of the form `arn:aws:acm:REGION:ACCOUNT:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`._
+
+Set `DOMAIN` to the DNS Zone you have in AWS
+
+```bash
+ELB_CNAME="${DESIREDNAMESPACE}.${DOMAIN}"
+ELB_CERTIFICATE_ARN=$(aws acm list-certificates | \
+  jq '.CertificateSummaryList[] | select (.DomainName == "'${DOMAIN}'") | .CertificateArn')
+
+cat <<EOF > infravalues.yaml
+#Persistence options
+persistence:
+  #Enables the creation of a persistent volume
+  enabled: true
+  efs:
+    #Enables EFS ussage
+    enabled: false
+    #DNS address of EFS
+    dns: fs-example.efs.us-east-1.amazonaws.com
+    #Base path to use within the EFS that is mounted as a volume
+    path: "/"
+  #Size allocated to the volume in K8S
+  baseSize: 20Gi
+
+nginx-ingress:
+  controller:
+    config:
+      ssl-redirect: "false"
+    scope:
+      enabled: true
+    publishService:
+      enabled: true
+    service:
+      targetPorts:
+        http: http
+        https: http
+      annotations:
+        external-dns.alpha.kubernetes.io/hostname: ${ELB_CNAME}
+        service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
+        service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: '3600'
+        service.beta.kubernetes.io/aws-load-balancer-ssl-cert: ${ELB_CERTIFICATE_ARN}
+        service.beta.kubernetes.io/aws-load-balancer-ssl-ports: https
+EOF
+
+helm install alfresco-incubator/alfresco-infrastructure \
+-f infravalues.yaml \
+--namespace $DESIREDNAMESPACE
+```
+
+</p>
+</details>
+
+For additional information on customizing the nginx-ingress chart please refer to the [nginx-ingress chart Readme](https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress)
+
+## Configuration
 The following table lists the configurable parameters of the infrastructure chart and their default values.
+
 
 | Parameter                  | Description                                     | Default                                                    |
 | -----------------------    | ---------------------------------------------   | ---------------------------------------------------------- |
@@ -229,13 +246,13 @@ The following table lists the configurable parameters of the infrastructure char
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
-helm install --name my-release \
+$ helm install --name my-release \
   --set persistence.efs.enabled=true \
-  alfresco-incubator/alfresco-infrastructure
+    alfresco-incubator/alfresco-infrastructure
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
-helm install alfresco-incubator/alfresco-infrastructure --name my-release -f values.yaml
+```console
+$ helm install alfresco-incubator/alfresco-infrastructure --name my-release -f values.yaml
 ```
