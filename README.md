@@ -20,7 +20,7 @@ The Alfresco Infrastructure chart aims at bringing in components that will commo
 # Introduction
 
 This chart bootstraps the creation of a persistent volume and persistent volume claim on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
-In addition it deploys the nginx-ingress chart which consists in an Ingress Controler that uses ConfigMaps to store nginx configuration.
+In addition it deploys the nginx-ingress chart which consists in an Ingress Controller that uses ConfigMaps to store nginx configuration.
 
 ## Prerequisites
 
