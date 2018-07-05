@@ -1,6 +1,6 @@
 # Alfresco Infrastructure
 
-The Alfresco Infrastructure chart aims at bringing in components that will commonly be used by the majority of applications within the Digital Business Platforms.
+The Alfresco Infrastructure chart aims at bringing in components that will commonly be used by the majority of applications within the Alfresco Digital Business Platform.
 
 ## Introduction
 
