@@ -227,6 +227,7 @@ helm install alfresco-incubator/alfresco-infrastructure \
 
 </p>
 </details>
+<br/>
 
 For additional information on customizing the nginx-ingress chart please refer to the [nginx-ingress chart Readme](https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress)
 
