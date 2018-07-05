@@ -15,8 +15,6 @@ Beside this it will bring in the following components of the dbp:
 |alfresco-activiti-cloud-registry | ^0.1.0 |
 |alfresco-api-gateway | 0.1.1 |
 
-The Alfresco Infrastructure chart aims at bringing in components that will commonly be used by the majority of applications within the Digital Business Platforms.
-
 # Introduction
 
 This chart bootstraps the creation of a persistent volume and persistent volume claim on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
