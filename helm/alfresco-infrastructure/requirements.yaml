@@ -8,7 +8,7 @@ dependencies:
     repository: https://kubernetes-charts.alfresco.com/incubator
     condition: alfresco-infrastructure.activemq.enabled
   - name: alfresco-identity-service
-    version: ^0.3.6
+    version: ^0.3.8
     condition: alfresco-infrastructure.alfresco-identity-service.enabled
     repository: https://kubernetes-charts.alfresco.com/incubator
   - name: alfresco-activiti-cloud-registry
