@@ -5,15 +5,8 @@ The Alfresco Infrastructure chart aims at bringing in components that will commo
 ## Introduction
 
 This chart bootstraps the creation of a persistent volume and persistent volume claim on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
-Beside this it will bring in the following components of the dbp:
 
-| Component | Version |
-| ------------- |:-------------:|
-|rabbitmq-ha | ^0.1.0 |
-|activemq | ^0.1.0 |
-|alfresco-identity-service| ^0.3.1 |
-|alfresco-activiti-cloud-registry | ^0.1.0 |
-|alfresco-api-gateway | 0.1.1 |
+Beside this it will bring in other shared, common components like the Identity Service. See the [Helm chart requirements](helm/alfresco-infrastructure/requirements.yaml) for the list of additional dependencies brought in.
 
 # Introduction
 
