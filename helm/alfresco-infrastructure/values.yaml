@@ -6,7 +6,7 @@ rabbitmq-ha:
   persistence:
     enabled: false
     size: 3Gi
-
+    
 persistence:
   enabled: true
   efs:
@@ -19,6 +19,8 @@ activemq:
   enabled: true
   
 nginx-ingress:
+  rbac:
+    create: true
   controller:
     scope:
       enabled: true  
