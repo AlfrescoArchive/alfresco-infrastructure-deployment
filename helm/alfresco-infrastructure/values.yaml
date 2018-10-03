@@ -1,12 +1,4 @@
-rabbitmq-ha:
-  enabled: true
-  replicaCount: 1
-  rbac:
-    create: false
-  persistence:
-    enabled: false
-    size: 3Gi
-    
+
 persistence:
   enabled: true
   efs:
