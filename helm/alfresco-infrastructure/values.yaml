@@ -11,6 +11,8 @@ activemq:
   enabled: true
   
 nginx-ingress:
+  rbac:
+    create: true
   controller:
     scope:
       enabled: true  
