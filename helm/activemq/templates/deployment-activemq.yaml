@@ -24,6 +24,12 @@ spec:
           value: "{{ .Values.activemq.image.configMinMemory }}"
         - name: ACTIVEMQ_CONFIG_MAXMEMORY
           value: "{{ .Values.activemq.image.configMaxMemory }}"
+        - name: ACTIVEMQ_BROKER_NAME
+          value: "{{ .Values.activemq.image.configBrokerName }}"
+        - name: ACTIVEMQ_ADMIN_LOGIN
+          value: "{{ .Values.activemq.image.configAdminLogin }}"
+        - name: ACTIVEMQ_ADMIN_PASSWORD	
+          value: "{{ .Values.activemq.image.configAdminPassword }}"
         ports:
         - name: stomp
           containerPort: {{ .Values.activemq.services.broker.ports.internal.stomp | default 61613 }}
@@ -36,13 +42,17 @@ spec:
         readinessProbe:
           tcpSocket:
             port: {{ .Values.activemq.services.broker.ports.internal.openwire | default 61616 }}
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: {{ .Values.activemq.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.activemq.readinessProbe.periodSeconds }}
+          failureThreshold: {{ .Values.activemq.readinessProbe.failureThreshold }}
+          timeoutSeconds: {{ .Values.activemq.readinessProbe.timeoutSeconds }}
         livenessProbe:
           tcpSocket:
             port: {{ .Values.activemq.services.broker.ports.internal.openwire | default 61616 }}
-          initialDelaySeconds: 5
-          periodSeconds: 25
+          initialDelaySeconds: {{ .Values.activemq.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.activemq.livenessProbe.periodSeconds }}
+          failureThreshold: {{ .Values.activemq.livenessProbe.failureThreshold }}
+          timeoutSeconds: {{ .Values.activemq.livenessProbe.timeoutSeconds }}
         volumeMounts:
         - name: data
           mountPath: {{ .Values.persistence.mountPath }}
