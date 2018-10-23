@@ -58,6 +58,7 @@ To change this behaviour and keep the data you can set the persistence.reclaimPo
 ```bash
 
 helm repo add alfresco-incubator https://kubernetes-charts.alfresco.com/incubator
+helm repo add alfresco-stable https://kubernetes-charts.alfresco.com/stable
 
 
 helm install alfresco-incubator/alfresco-infrastructure \
