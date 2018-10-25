@@ -7,14 +7,6 @@ dependencies:
     version: ^0.4
     condition: alfresco-infrastructure.alfresco-identity-service.enabled
     repository: https://kubernetes-charts.alfresco.com/incubator
-  - name: alfresco-activiti-cloud-registry
-    version: ^0.1.0
-    condition: alfresco-infrastructure.alfresco-activiti-cloud-registry.enabled
-    repository: https://kubernetes-charts.alfresco.com/incubator
-  - name: alfresco-api-gateway
-    version: 0.1.1
-    condition: alfresco-infrastructure.alfresco-api-gateway.enabled
-    repository: https://kubernetes-charts.alfresco.com/incubator
   - name: nginx-ingress
     condition: alfresco-infrastructure.nginx-ingress.enabled
     repository: https://kubernetes-charts.storage.googleapis.com/
