@@ -3,7 +3,3 @@ dependencies:
     version: ^1.0
     repository: https://kubernetes-charts.alfresco.com/stable
     condition: alfresco-infrastructure.activemq.enabled
-  - name: nginx-ingress
-    condition: alfresco-infrastructure.nginx-ingress.enabled
-    repository: https://kubernetes-charts.storage.googleapis.com/
-    version: 0.14.0

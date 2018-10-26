@@ -8,12 +8,3 @@ persistence:
 
 activemq:
   enabled: true
-  
-nginx-ingress:
-  rbac:
-    create: true
-  controller:
-    scope:
-      enabled: true  
-    config:
-      ssl-redirect: "false"
