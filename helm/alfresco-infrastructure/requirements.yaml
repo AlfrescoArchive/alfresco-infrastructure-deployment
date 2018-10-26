@@ -3,10 +3,6 @@ dependencies:
     version: ^1.0
     repository: https://kubernetes-charts.alfresco.com/stable
     condition: alfresco-infrastructure.activemq.enabled
-  - name: alfresco-identity-service
-    version: ^0.4
-    condition: alfresco-infrastructure.alfresco-identity-service.enabled
-    repository: https://kubernetes-charts.alfresco.com/incubator
   - name: nginx-ingress
     condition: alfresco-infrastructure.nginx-ingress.enabled
     repository: https://kubernetes-charts.storage.googleapis.com/

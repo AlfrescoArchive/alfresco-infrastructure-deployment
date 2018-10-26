@@ -1,4 +1,3 @@
-
 persistence:
   enabled: true
   efs:
@@ -18,6 +17,3 @@ nginx-ingress:
       enabled: true  
     config:
       ssl-redirect: "false"
-
-alfresco-identity-service:
-  enabled: true
