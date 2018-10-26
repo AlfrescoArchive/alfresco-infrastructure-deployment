@@ -6,7 +6,7 @@ The Alfresco Infrastructure chart aims at bringing in components that will commo
 
 This chart bootstraps the creation of a persistent volume and persistent volume claim on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Beside this it will bring in other shared, common components like the Identity Service. See the [Helm chart requirements](helm/alfresco-infrastructure/requirements.yaml) for the list of additional dependencies brought in.
+Beside this it will bring in other shared, common components like the ActiveMq message broker. See the [Helm chart requirements](helm/alfresco-infrastructure/requirements.yaml) for the list of additional dependencies brought in.
 
 # Introduction
 
@@ -57,11 +57,10 @@ To change this behaviour and keep the data you can set the persistence.reclaimPo
 ### 1. Deploy the infrastructure charts:
 ```bash
 
-helm repo add alfresco-incubator https://kubernetes-charts.alfresco.com/incubator
 helm repo add alfresco-stable https://kubernetes-charts.alfresco.com/stable
 
 
-helm install alfresco-incubator/alfresco-infrastructure \
+helm install alfresco-stable/alfresco-infrastructure \
 --set persistence.efs.enabled=true \
 --set persistence.efs.dns="$NFSSERVER" \
 --namespace $DESIREDNAMESPACE
@@ -143,7 +142,7 @@ nginx-ingress:
       default-ssl-certificate: $DESIREDNAMESPACE/certsecret
 EOF
 
-helm install alfresco-incubator/alfresco-infrastructure \
+helm install alfresco-stable/alfresco-infrastructure \
 -f infravalues.yaml \
 --namespace $DESIREDNAMESPACE
 ```
@@ -212,7 +211,7 @@ nginx-ingress:
         service.beta.kubernetes.io/aws-load-balancer-ssl-ports: https
 EOF
 
-helm install alfresco-incubator/alfresco-infrastructure \
+helm install alfresco-stable/alfresco-infrastructure \
 -f infravalues.yaml \
 --namespace $DESIREDNAMESPACE
 ```
@@ -235,17 +234,18 @@ The following table lists the configurable parameters of the infrastructure char
 | `persistence.efs.enabled`  | Use efs persistence.                            | `false`                                                    |
 | `persistence.efs.dns`      | Elastic File System DNS address                 | `none`                                                     |
 | `persistence.efs.path`     | Path into the EFS mount to be used.             | `/`                                                         |
+| `activemq.enabled`     | Enable ActiveMq             | `true`                                                         |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
 $ helm install --name my-release \
   --set persistence.efs.enabled=true \
-    alfresco-incubator/alfresco-infrastructure
+    alfresco-stable/alfresco-infrastructure
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install alfresco-incubator/alfresco-infrastructure --name my-release -f values.yaml
+$ helm install alfresco-stable/alfresco-infrastructure --name my-release -f values.yaml
 ```
