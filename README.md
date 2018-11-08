@@ -93,6 +93,8 @@ By default, this chart deploys the [nginx-ingress chart](https://github.com/kube
 
 ```yaml
 nginx-ingress:
+  rbac:
+    create: true
   config:
     ssl-redirect: "false"
   controller:
@@ -132,6 +134,8 @@ persistence:
   baseSize: 20Gi
 
 nginx-ingress:
+  rbac:
+    create: true
   controller:
     config:
       ssl-redirect: "false"
@@ -193,6 +197,8 @@ persistence:
   baseSize: 20Gi
 
 nginx-ingress:
+  rbac:
+    create: true
   controller:
     config:
       ssl-redirect: "false"
