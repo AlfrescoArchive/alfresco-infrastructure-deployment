@@ -133,16 +133,17 @@ helm install stable/nginx-ingress --version=0.14.0 -f ingressvalues.yaml \
 <summary>Using a self-signed certificate</summary>
 <p>
 
-If you want your own certificate set on the ELB created through AWS you should create a secret from your cert files:
+If you want your own certificate set on the ELB created through AWS you should create a secret from your cert files
 
 ```bash
 kubectl create secret tls certsecret --key /tmp/tls.key --cert /tmp/tls.crt \
   --namespace $DESIREDNAMESPACE
+```
 
-Then deploy the chart with following settings:
+Then deploy the chart with following:
 
 <details>
-<summary>deploy the infrastructure chart</summary>
+<summary>settings for deploy the infrastructure chart</summary>
 <p>
 
 ```bash
@@ -179,12 +180,11 @@ helm install alfresco-incubator/alfresco-infrastructure \
 -f infravalues.yaml \
 --namespace $DESIREDNAMESPACE
 ```
-
 </p>
 </details>
 
 <details>
-<summary>deploy the nginx-ingress chart</summary>
+<summary>settings for deploy the nginx-ingress chart</summary>
 <p>
 
 ```bash
