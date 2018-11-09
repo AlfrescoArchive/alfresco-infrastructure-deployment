@@ -89,7 +89,6 @@ For more information on running and tearing down k8s environments, follow this [
 
 ## Nginx-ingress Custom Configuration
 
-### Default configuration deployed
 By default, this chart deploys the [nginx-ingress chart](https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress) with the following configuration:
 
 ```yaml
@@ -102,11 +101,36 @@ nginx-ingress:
     scope:
       enabled: true
 ```
-
-If you want to customize the SSL certificate on the ingress level you can choose one of the options below:
+If you want to customize the certificate type on the ingress level, you can choose one of the options below:
 
 <details>
-<summary>Option 1</summary>
+<summary>Using a dummy certificate</summary>
+<p>
+
+This will create a ELB when using AWS and will set a dummy certificate on it.
+
+```bash
+helm repo update
+
+cat <<EOF > ingressvalues.yaml
+rbac:
+  create: true
+controller:
+  config:
+    ssl-redirect: "false"
+  scope:
+    enabled: true
+EOF
+
+helm install stable/nginx-ingress --version=0.14.0 -f ingressvalues.yaml \
+  --namespace $DESIREDNAMESPACE
+```
+
+</p>
+</details>
+
+<details>
+<summary>Using a self-signed certificate</summary>
 <p>
 
 If you want your own certificate set on the ELB created through AWS you should create a secret from your cert files:
@@ -114,9 +138,12 @@ If you want your own certificate set on the ELB created through AWS you should c
 ```bash
 kubectl create secret tls certsecret --key /tmp/tls.key --cert /tmp/tls.crt \
   --namespace $DESIREDNAMESPACE
-```
 
-Then deploy the infrastructure with following settings:
+Then deploy the chart with following settings:
+
+<details>
+<summary>deploy the infrastructure chart</summary>
+<p>
 
 ```bash
 cat <<EOF > infravalues.yaml
@@ -156,16 +183,43 @@ helm install alfresco-incubator/alfresco-infrastructure \
 </p>
 </details>
 
+<details>
+<summary>deploy the nginx-ingress chart</summary>
+<p>
+
+```bash
+cat <<EOF > ingressvalues.yaml
+rbac:
+  create: true
+controller:
+  config:
+    ssl-redirect: "false"
+  scope:
+    enabled: true
+  publishService:
+    enabled: true
+  extraArgs:
+    default-ssl-certificate: $DESIREDNAMESPACE/certsecret
+EOF
+
+helm install stable/nginx-ingress --version=0.14.0 -f ingressvalues.yaml \
+  --namespace $DESIREDNAMESPACE
+```
+</p>
+</details>
+
+</p>
+</details>
 
 <details>
-<summary>Option 2</summary>
+<summary>Using an AWS generated certificate and Amazon Route 53 zone</summary>
 <p>
 
 If you
 
-* Created the cluster in AWS
-* Have a matching SSL/TLS certificate stored in [AWS Certificate Manager](https://aws.amazon.com/certificate-manager/)
-* Are using a zone in [Amazon Route 53](https://aws.amazon.com/route53/)
+* created the cluster in AWS using [kops](https://github.com/kubernetes/kops/)
+* have a matching SSL/TLS certificate stored in [AWS Certificate Manager](https://aws.amazon.com/certificate-manager/)
+* are using a zone in [Amazon Route 53](https://aws.amazon.com/route53/)
 
 Kubernetes' [External DNS](https://github.com/kubernetes-incubator/external-dns)
 can autogenerate a DNS entry for you (a CNAME of the generated ELB) and apply
@@ -175,7 +229,11 @@ _Note: External DNS is currenty in Alpha Version - June 2018_
 
 _Note: AWS Certificate Manager ARNs are of the form `arn:aws:acm:REGION:ACCOUNT:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`._
 
-Set `DOMAIN` to the DNS Zone you have in AWS
+Set `DOMAIN` to the DNS Zone you used when [creating the cluster](https://github.com/kubernetes/kops/blob/master/docs/aws.md#scenario-1b-a-subdomain-under-a-domain-purchasedhosted-via-aws).
+
+<details>
+<summary>deploy the infrastructure chart</summary>
+<p>
 
 ```bash
 ELB_CNAME="${DESIREDNAMESPACE}.${DOMAIN}"
@@ -226,88 +284,11 @@ helm install alfresco-incubator/alfresco-infrastructure \
 
 </p>
 </details>
-<br/>
 
-For additional information on customizing the nginx-ingress chart please refer to the [nginx-ingress chart Readme](https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress)
-
-### Install the nginx-ingress-controller into your cluster
-In order to pull the ingress chart to the namespace, you can choose one of the options below: 
-<details>
-<summary>Using a dummy certificate</summary>
-<p>
-
-This will create a ELB when using AWS and will set a dummy certificate on it.
-
-```bash
-helm repo update
-
-cat <<EOF > ingressvalues.yaml
-rbac:
-  create: true
-controller:
-  config:
-    ssl-redirect: "false"
-  scope:
-    enabled: true
-EOF
-
-helm install stable/nginx-ingress --version=0.14.0 -f ingressvalues.yaml \
-  --namespace $DESIREDNAMESPACE
-```
-
-</p>
-</details>
 
 <details>
-<summary>Using a self-signed certificate</summary>
+<summary>deploy the nginx-ingress chart</summary>
 <p>
-
-If you want your own certificate set here you should create a secret from your cert files:
-
-```bash
-kubectl create secret tls certsecret --key /tmp/tls.key --cert /tmp/tls.crt \
-  --namespace $DESIREDNAMESPACE
-
-#Then deploy the ingress with following settings
-
-cat <<EOF > ingressvalues.yaml
-rbac:
-  create: true
-controller:
-  config:
-    ssl-redirect: "false"
-  scope:
-    enabled: true
-  publishService:
-    enabled: true
-  extraArgs:
-    default-ssl-certificate: $DESIREDNAMESPACE/certsecret
-EOF
-
-helm install stable/nginx-ingress --version=0.14.0 -f ingressvalues.yaml \
-  --namespace $DESIREDNAMESPACE
-```
-
-</p>
-</details>
-
-<details>
-<summary>Using an AWS generated certificate and Amazon Route 53 zone</summary>
-<p>
-
-If you
-
-* created the cluster in AWS using [kops](https://github.com/kubernetes/kops/)
-* have a matching SSL/TLS certificate stored in [AWS Certificate Manager](https://aws.amazon.com/certificate-manager/)
-* are using a zone in [Amazon Route 53](https://aws.amazon.com/route53/)
-
-Kubernetes' [External DNS](https://github.com/kubernetes-incubator/external-dns)
-can autogenerate a DNS entry for you (a CNAME of the generated ELB) and apply
-the SSL/TLS certificate to the ELB.
-
-_Note: AWS Certificate Manager ARNs are of the form `arn:aws:acm:REGION:ACCOUNT:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`._
-
-Set `DOMAIN` to the DNS Zone you used when [creating the cluster](https://github.com/kubernetes/kops/blob/master/docs/aws.md#scenario-1b-a-subdomain-under-a-domain-purchasedhosted-via-aws).
 
 ```bash
 ELB_CNAME="${DESIREDNAMESPACE}.${DOMAIN}"
@@ -343,7 +324,13 @@ helm install stable/nginx-ingress --version=0.14.0 -f ingressvalues.yaml \
 
 </p>
 </details>
+
+</p>
+</details>
 <br/>
+
+
+For additional information on customizing the nginx-ingress chart please refer to the [nginx-ingress chart Readme](https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress)
 
 ## Configuration
 The following table lists the configurable parameters of the infrastructure chart and their default values.
