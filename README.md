@@ -89,7 +89,7 @@ For more information on running and tearing down k8s environments, follow this [
 
 ## Nginx-ingress Custom Configuration
 
-##Default configuration deployed
+## Default configuration deployed
 By default, this chart deploys the [nginx-ingress chart](https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress) with the following configuration:
 
 ```yaml
@@ -230,7 +230,7 @@ helm install alfresco-incubator/alfresco-infrastructure \
 
 For additional information on customizing the nginx-ingress chart please refer to the [nginx-ingress chart Readme](https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress)
 
-##Install the nginx-ingress-controller into your cluster
+## Install the nginx-ingress-controller into your cluster
 In order to pull the ingress chart to the namespace, you can choose one of the options below: 
 <details>
 <summary>Using a dummy certificate</summary>
