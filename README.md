@@ -89,7 +89,7 @@ For more information on running and tearing down k8s environments, follow this [
 
 ## Nginx-ingress Custom Configuration
 
-By default, this chart deploys the [nginx-ingress chart](https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress) with the following configuration:
+By default, this chart deploys the [nginx-ingress chart](https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress) with the following configuration that will create an ELB when using AWS and will set a dummy certificate on it:
 
 ```yaml
 nginx-ingress:
@@ -104,32 +104,6 @@ nginx-ingress:
 If you want to customize the certificate type on the ingress level, you can choose one of the options below:
 
 <details>
-<summary>Using a dummy certificate</summary>
-<p>
-
-This will create a ELB when using AWS and will set a dummy certificate on it.
-
-```bash
-helm repo update
-
-cat <<EOF > ingressvalues.yaml
-rbac:
-  create: true
-controller:
-  config:
-    ssl-redirect: "false"
-  scope:
-    enabled: true
-EOF
-
-helm install stable/nginx-ingress --version=0.14.0 -f ingressvalues.yaml \
-  --namespace $DESIREDNAMESPACE
-```
-
-</p>
-</details>
-
-<details>
 <summary>Using a self-signed certificate</summary>
 <p>
 
@@ -140,11 +114,7 @@ kubectl create secret tls certsecret --key /tmp/tls.key --cert /tmp/tls.crt \
   --namespace $DESIREDNAMESPACE
 ```
 
-Then deploy the chart with following:
-
-<details>
-<summary>settings for deploy the infrastructure chart</summary>
-<p>
+Then deploy the infrastructure chart with following:
 
 ```bash
 cat <<EOF > infravalues.yaml
@@ -180,33 +150,6 @@ helm install alfresco-incubator/alfresco-infrastructure \
 -f infravalues.yaml \
 --namespace $DESIREDNAMESPACE
 ```
-</p>
-</details>
-
-<details>
-<summary>settings for deploy the nginx-ingress chart</summary>
-<p>
-
-```bash
-cat <<EOF > ingressvalues.yaml
-rbac:
-  create: true
-controller:
-  config:
-    ssl-redirect: "false"
-  scope:
-    enabled: true
-  publishService:
-    enabled: true
-  extraArgs:
-    default-ssl-certificate: $DESIREDNAMESPACE/certsecret
-EOF
-
-helm install stable/nginx-ingress --version=0.14.0 -f ingressvalues.yaml \
-  --namespace $DESIREDNAMESPACE
-```
-</p>
-</details>
 
 </p>
 </details>
@@ -230,10 +173,6 @@ _Note: External DNS is currenty in Alpha Version - June 2018_
 _Note: AWS Certificate Manager ARNs are of the form `arn:aws:acm:REGION:ACCOUNT:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`._
 
 Set `DOMAIN` to the DNS Zone you used when [creating the cluster](https://github.com/kubernetes/kops/blob/master/docs/aws.md#scenario-1b-a-subdomain-under-a-domain-purchasedhosted-via-aws).
-
-<details>
-<summary>deploy the infrastructure chart</summary>
-<p>
 
 ```bash
 ELB_CNAME="${DESIREDNAMESPACE}.${DOMAIN}"
@@ -284,51 +223,7 @@ helm install alfresco-incubator/alfresco-infrastructure \
 
 </p>
 </details>
-
-
-<details>
-<summary>deploy the nginx-ingress chart</summary>
-<p>
-
-```bash
-ELB_CNAME="${DESIREDNAMESPACE}.${DOMAIN}"
-ELB_CERTIFICATE_ARN=$(aws acm list-certificates | \
-  jq '.CertificateSummaryList[] | select (.DomainName == "'${DOMAIN}'") | .CertificateArn')
-
-cat <<EOF > ingressvalues.yaml
-rbac:
-  create: true
-controller:
-  config:
-    ssl-redirect: "false"
-  scope:
-    enabled: true
-  publishService:
-    enabled: true
-  service:
-    targetPorts:
-      http: http
-      https: http
-    annotations:
-      external-dns.alpha.kubernetes.io/hostname: ${ELB_CNAME}
-      service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
-      service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: '3600'
-      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: ${ELB_CERTIFICATE_ARN}
-      service.beta.kubernetes.io/aws-load-balancer-ssl-ports: https
-EOF
-
-helm install stable/nginx-ingress --version=0.14.0 -f ingressvalues.yaml \
-  --namespace $DESIREDNAMESPACE
-
-```
-
-</p>
-</details>
-
-</p>
-</details>
 <br/>
-
 
 For additional information on customizing the nginx-ingress chart please refer to the [nginx-ingress chart Readme](https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress)
 
@@ -350,11 +245,21 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install --name my-release \
   --set persistence.efs.enabled=true \
-    alfresco-incubator/alfresco-infrastructure
+    alfresco-incubator/alfresco-infrastructure \
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
 $ helm install alfresco-incubator/alfresco-infrastructure --name my-release -f values.yaml
+```
+
+You have also the posibility to deploy only the ingress chart or any other component by itself if needed, using the following:
+
+```bash
+$ helm install alfresco-incubator/alfresco-infrastructure \
+  --set alfresco-infrastructure.nginx-ingress.enabled=true \
+  --set alfresco-infrastructure.activemq.enabled=false \
+  --set alfresco-infrastructure.alfresco-identity-service.enabled=false \
+  --namespace $DESIREDNAMESPACE
 ```
