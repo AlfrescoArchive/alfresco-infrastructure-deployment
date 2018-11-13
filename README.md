@@ -89,31 +89,32 @@ For more information on running and tearing down k8s environments, follow this [
 
 ## Nginx-ingress Custom Configuration
 
-By default, this chart deploys the [nginx-ingress chart](https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress) with the following configuration:
+By default, this chart deploys the [nginx-ingress chart](https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress) with the following configuration that will create an ELB when using AWS and will set a dummy certificate on it:
 
 ```yaml
 nginx-ingress:
+  rbac:
+    create: true
   config:
     ssl-redirect: "false"
   controller:
     scope:
       enabled: true
 ```
-
-If you want to customize the SSL certificate on the ingress level you can choose one of the options below:
+If you want to customize the certificate type on the ingress level, you can choose one of the options below:
 
 <details>
-<summary>Option 1</summary>
+<summary>Using a self-signed certificate</summary>
 <p>
 
-If you want your own certificate set on the ELB created through AWS you should create a secret from your cert files:
+If you want your own certificate set on the ELB created through AWS you should create a secret from your cert files
 
 ```bash
 kubectl create secret tls certsecret --key /tmp/tls.key --cert /tmp/tls.crt \
   --namespace $DESIREDNAMESPACE
 ```
 
-Then deploy the infrastructure with following settings:
+Then deploy the infrastructure chart with following:
 
 ```bash
 cat <<EOF > infravalues.yaml
@@ -132,6 +133,8 @@ persistence:
   baseSize: 20Gi
 
 nginx-ingress:
+  rbac:
+    create: true
   controller:
     config:
       ssl-redirect: "false"
@@ -151,16 +154,15 @@ helm install alfresco-incubator/alfresco-infrastructure \
 </p>
 </details>
 
-
 <details>
-<summary>Option 2</summary>
+<summary>Using an AWS generated certificate and Amazon Route 53 zone</summary>
 <p>
 
 If you
 
-* Created the cluster in AWS
-* Have a matching SSL/TLS certificate stored in [AWS Certificate Manager](https://aws.amazon.com/certificate-manager/)
-* Are using a zone in [Amazon Route 53](https://aws.amazon.com/route53/)
+* created the cluster in AWS using [kops](https://github.com/kubernetes/kops/)
+* have a matching SSL/TLS certificate stored in [AWS Certificate Manager](https://aws.amazon.com/certificate-manager/)
+* are using a zone in [Amazon Route 53](https://aws.amazon.com/route53/)
 
 Kubernetes' [External DNS](https://github.com/kubernetes-incubator/external-dns)
 can autogenerate a DNS entry for you (a CNAME of the generated ELB) and apply
@@ -170,7 +172,7 @@ _Note: External DNS is currenty in Alpha Version - June 2018_
 
 _Note: AWS Certificate Manager ARNs are of the form `arn:aws:acm:REGION:ACCOUNT:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`._
 
-Set `DOMAIN` to the DNS Zone you have in AWS
+Set `DOMAIN` to the DNS Zone you used when [creating the cluster](https://github.com/kubernetes/kops/blob/master/docs/aws.md#scenario-1b-a-subdomain-under-a-domain-purchasedhosted-via-aws).
 
 ```bash
 ELB_CNAME="${DESIREDNAMESPACE}.${DOMAIN}"
@@ -193,6 +195,8 @@ persistence:
   baseSize: 20Gi
 
 nginx-ingress:
+  rbac:
+    create: true
   controller:
     config:
       ssl-redirect: "false"
@@ -227,14 +231,17 @@ For additional information on customizing the nginx-ingress chart please refer t
 The following table lists the configurable parameters of the infrastructure chart and their default values.
 
 
-| Parameter                  | Description                                     | Default                                                    |
-| -----------------------    | ---------------------------------------------   | ---------------------------------------------------------- |
-| `persistence.enabled`      | Persistence is enabled for this chart           | `true`                                                     |
-| `persistence.baseSize`     | Size of the persistent volume.                  | `20Gi`                                                     |
-| `persistence.reclaimPolicy`| Policy for keeping or removing the data after helm delete. Use Retain to keep the data. | `Recycle`          |
-| `persistence.efs.enabled`  | Use efs persistence.                            | `false`                                                    |
-| `persistence.efs.dns`      | Elastic File System DNS address                 | `none`                                                     |
-| `persistence.efs.path`     | Path into the EFS mount to be used.             | `/`                                                         |
+| Parameter                                                   | Description                                          | Default                                             |
+| --------------------------------------------------------    | --------------------------------------------------   | --------------------------------------------------- |
+| `persistence.enabled`                                       | Persistence is enabled for this chart                | `true`                                              |
+| `persistence.baseSize`                                      | Size of the persistent volume.                       | `20Gi`                                              |
+| `persistence.reclaimPolicy`                                 | Policy for keeping or removing the data after helm delete. Use Retain to keep the data. | `Recycle`        |
+| `persistence.efs.enabled`                                   | Use efs persistence.                                 | `false`                                             |
+| `persistence.efs.dns`                                       | Elastic File System DNS address                      | `none`                                              |
+| `persistence.efs.path`                                      | Path into the EFS mount to be used.                  | `/`                                                 |
+| `alfresco-infrastructure.activemq.enabled`                  | Activemq is enabled for this chart                   | `true`                                              |
+| `alfresco-infrastructure.alfresco-identity-service.enabled` | Alfresco Identity Service is enabled for this chart  | `true`                                              |
+| `alfresco-infrastructure.nginx-ingress.enabled`             | Nginx-ingress is enabled for this chart              | `true`                                              |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
