@@ -256,3 +256,14 @@ Alternatively, a YAML file that specifies the values for the parameters can be p
 ```console
 $ helm install alfresco-incubator/alfresco-infrastructure --name my-release -f values.yaml
 ```
+
+## Troubleshooting
+
+**Error: "realm-secret" already exists**
+When installing the Infrastructure chart, with the Identity Service enabled, if you recieve the message *Error: release \<release-name\> failed: secrets "realm-secret" already exists* there is an existing realm secret in the namespace you are installing.  This could mean that you are either installing into a namespace with an existing Identity Service or there is a realm secret leftover from a previous installation of the Identity Service.
+
+If the realm secret is leftover from a previous installation it can be removed with the following
+
+```bash
+$ kubectl delete secret realm-secret --namespace $DESIREDNAMESPACE
+```
