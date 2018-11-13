@@ -231,14 +231,17 @@ For additional information on customizing the nginx-ingress chart please refer t
 The following table lists the configurable parameters of the infrastructure chart and their default values.
 
 
-| Parameter                  | Description                                     | Default                                                    |
-| -----------------------    | ---------------------------------------------   | ---------------------------------------------------------- |
-| `persistence.enabled`      | Persistence is enabled for this chart           | `true`                                                     |
-| `persistence.baseSize`     | Size of the persistent volume.                  | `20Gi`                                                     |
-| `persistence.reclaimPolicy`| Policy for keeping or removing the data after helm delete. Use Retain to keep the data. | `Recycle`          |
-| `persistence.efs.enabled`  | Use efs persistence.                            | `false`                                                    |
-| `persistence.efs.dns`      | Elastic File System DNS address                 | `none`                                                     |
-| `persistence.efs.path`     | Path into the EFS mount to be used.             | `/`                                                         |
+| Parameter                                                   | Description                                          | Default                                             |
+| --------------------------------------------------------    | --------------------------------------------------   | --------------------------------------------------- |
+| `persistence.enabled`                                       | Persistence is enabled for this chart                | `true`                                              |
+| `persistence.baseSize`                                      | Size of the persistent volume.                       | `20Gi`                                              |
+| `persistence.reclaimPolicy`                                 | Policy for keeping or removing the data after helm delete. Use Retain to keep the data. | `Recycle`        |
+| `persistence.efs.enabled`                                   | Use efs persistence.                                 | `false`                                             |
+| `persistence.efs.dns`                                       | Elastic File System DNS address                      | `none`                                              |
+| `persistence.efs.path`                                      | Path into the EFS mount to be used.                  | `/`                                                 |
+| `alfresco-infrastructure.activemq.enabled`                  | Activemq is enabled for this chart                   | `true`                                              |
+| `alfresco-infrastructure.alfresco-identity-service.enabled` | Alfresco Identity Service is enabled for this chart  | `true`                                              |
+| `alfresco-infrastructure.nginx-ingress.enabled`             | Nginx-ingress is enabled for this chart              | `true`                                              |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -252,14 +255,4 @@ Alternatively, a YAML file that specifies the values for the parameters can be p
 
 ```console
 $ helm install alfresco-incubator/alfresco-infrastructure --name my-release -f values.yaml
-```
-
-You have also the posibility to deploy only the ingress chart or any other component by itself if needed, using the following:
-
-```bash
-$ helm install alfresco-incubator/alfresco-infrastructure \
-  --set alfresco-infrastructure.nginx-ingress.enabled=true \
-  --set alfresco-infrastructure.activemq.enabled=false \
-  --set alfresco-infrastructure.alfresco-identity-service.enabled=false \
-  --namespace $DESIREDNAMESPACE
 ```
