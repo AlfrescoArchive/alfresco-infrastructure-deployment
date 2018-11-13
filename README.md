@@ -245,7 +245,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install --name my-release \
   --set persistence.efs.enabled=true \
-    alfresco-incubator/alfresco-infrastructure \
+    alfresco-incubator/alfresco-infrastructure
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
