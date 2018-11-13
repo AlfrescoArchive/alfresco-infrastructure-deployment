@@ -40,7 +40,7 @@ This environment variable will be used in the deployment steps.
 
 ### Amazon EFS Storage (**NOTE! ONLY FOR AWS!**)
 
-Create a EFS storage on AWS and make sure it is in the same VPC as your cluster. Make sure you open inbound traffic in the security group to allow NFS traffic. Save the name of the server ex:
+Create an EFS storage on AWS and make sure it is in the same VPC as your cluster. Make sure you open inbound traffic in the security group to allow NFS traffic. Save the name of the server as in this example:
 
 ```bash
 export NFSSERVER=fs-d660549f.efs.us-east-1.amazonaws.com
@@ -114,7 +114,7 @@ kubectl create secret tls certsecret --key /tmp/tls.key --cert /tmp/tls.crt \
   --namespace $DESIREDNAMESPACE
 ```
 
-Then deploy the infrastructure chart with following:
+Then deploy the infrastructure chart with the following:
 
 ```bash
 cat <<EOF > infravalues.yaml
