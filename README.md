@@ -227,6 +227,8 @@ helm install alfresco-incubator/alfresco-infrastructure \
 
 For additional information on customizing the nginx-ingress chart please refer to the [nginx-ingress chart Readme](https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress)
 
+_Note: Terminating SSL at LB level currently causes invalid redirect issues on identity service level.
+
 ## Configuration
 The following table lists the configurable parameters of the infrastructure chart and their default values.
 
