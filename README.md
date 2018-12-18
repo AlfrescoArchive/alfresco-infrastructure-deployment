@@ -8,20 +8,7 @@ This chart bootstraps the creation of a persistent volume and persistent volume 
 
 Beside this it will bring in other shared, common components like the Identity Service. See the [Helm chart requirements](helm/alfresco-infrastructure/requirements.yaml) for the list of additional dependencies brought in.
 
-# Introduction
-
-This chart bootstraps the creation of a persistent volume and persistent volume claim on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
-In addition it deploys the nginx-ingress chart which consists in an Ingress Controller that uses ConfigMaps to store nginx configuration.
-
-## Prerequisites
-
-| Component        | Recommended version |
-| ------------- |:-------------:|
-| Docker     | 17.0.9.1 |
-| Kubernetes | 1.8.4    |
-| Helm       | 2.8.2    |
-
-Any variation from these technologies and versions may affect the end result. If you do experience any issues please let us know through our [Gitter channel](https://gitter.im/Alfresco/platform-services?utm_source=share-link&utm_medium=link&utm_campaign=share-link).
+Check [prerequisites section](https://github.com/Alfresco/alfresco-dbp-deployment/blob/master/README-prerequisite.md) before you start.
 
 ### Kubernetes Cluster
 
