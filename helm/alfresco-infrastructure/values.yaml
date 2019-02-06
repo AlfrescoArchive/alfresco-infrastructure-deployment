@@ -21,3 +21,6 @@ nginx-ingress:
 
 alfresco-identity-service:
   enabled: true
+
+alfresco-event-gateway:
+  enabled: true
