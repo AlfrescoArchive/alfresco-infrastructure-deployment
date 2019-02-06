@@ -1,6 +1,11 @@
 
 persistence:
   enabled: true
+  storageClass: #enable and define if you already have a custom storage class defined
+    enabled: false
+    accessModes:
+      - ReadWriteMany
+    name: "nfs-client" #Custom storage classs name
   efs:
     enabled: false
     dns: fs-example.efs.us-east-1.amazonaws.com #For aws you will need to specify the EFS server

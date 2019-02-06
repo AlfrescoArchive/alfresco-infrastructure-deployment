@@ -26,12 +26,19 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: alfresco-volume-claim
-spec:
+spec:      
+  {{ if .Values.persistence.storageClass.enabled }}
   accessModes:
-  {{ if .Values.persistence.efs.enabled }}
+  {{- range .Values.persistence.storageClass.accessModes }}
+    - {{ . }}
+  {{- end }}
+  storageClassName: {{ .Values.persistence.storageClass.name }}
+  {{ else if .Values.persistence.efs.enabled }}
+  accessModes:
     - ReadWriteMany
   storageClassName: efs-{{ template "alfresco-infrastructure.fullname" . }}
   {{ else }}
+  accessModes:
     - ReadWriteOnce
   {{ end }}
   resources:
