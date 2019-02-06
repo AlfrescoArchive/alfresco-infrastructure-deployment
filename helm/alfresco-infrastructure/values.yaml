@@ -7,9 +7,6 @@ persistence:
     path: "/"
   baseSize: 20Gi
 
-activemq:
-  enabled: true
-  
 nginx-ingress:
   rbac:
     create: true
@@ -18,6 +15,4 @@ nginx-ingress:
       enabled: true  
     config:
       ssl-redirect: "false"
-
-alfresco-identity-service:
-  enabled: true
+      server-tokens: "false"
