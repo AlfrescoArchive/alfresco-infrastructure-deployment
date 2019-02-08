@@ -25,3 +25,11 @@ nginx-ingress:
       enabled: true  
     config:
       ssl-redirect: "false"
+      
+alfresco-infrastructure:
+  alfresco-identity-service:
+    enabled: true
+  alfresco-event-gateway:
+    enabled: true
+  activemq:
+    enabled: true
