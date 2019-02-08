@@ -11,3 +11,7 @@ dependencies:
     condition: alfresco-infrastructure.nginx-ingress.enabled
     repository: https://kubernetes-charts.storage.googleapis.com/
     version: 0.14.0
+  - name: alfresco-event-gateway
+    version: 0.1.2
+    repository: https://kubernetes-charts.alfresco.com/incubator
+    condition: alfresco-infrastructure.alfresco-event-gateway.enabled
