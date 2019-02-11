@@ -84,6 +84,7 @@ nginx-ingress:
     create: true
   config:
     ssl-redirect: "false"
+    server-tokens: "false"
   controller:
     scope:
       enabled: true
@@ -125,6 +126,7 @@ nginx-ingress:
   controller:
     config:
       ssl-redirect: "false"
+      server-tokens: "false"
     scope:
       enabled: true
     publishService:
@@ -187,6 +189,7 @@ nginx-ingress:
   controller:
     config:
       ssl-redirect: "false"
+      server-tokens: "false"
     scope:
       enabled: true
     publishService:
