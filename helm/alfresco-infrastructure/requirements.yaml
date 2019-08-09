@@ -11,3 +11,4 @@ dependencies:
     condition: alfresco-infrastructure.nginx-ingress.enabled
     repository: https://kubernetes-charts.storage.googleapis.com/
     version: 0.14.0
+    
