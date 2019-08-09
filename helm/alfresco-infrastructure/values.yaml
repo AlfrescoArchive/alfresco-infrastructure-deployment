@@ -1,15 +1,22 @@
-
 persistence:
   enabled: true
+  baseSize: 20Gi
+  storageClass: #enable and define if you already have a custom storage class defined
+    enabled: false
+    accessModes:
+      - ReadWriteMany
+    name: "nfs" #Custom storage classs name
   efs:
     enabled: false
     dns: fs-example.efs.us-east-1.amazonaws.com #For aws you will need to specify the EFS server
     path: "/"
-  baseSize: 20Gi
+  azureFile:
+    enabled: false
+    secretName: ""
+    shareName: ""
+    # In case the secret is stored in a different namespace
+    shareNamespace: ""
 
-activemq:
-  enabled: true
-  
 nginx-ingress:
   rbac:
     create: true
@@ -18,6 +25,8 @@ nginx-ingress:
       enabled: true  
     config:
       ssl-redirect: "false"
-
-alfresco-identity-service:
-  enabled: true
+      server-tokens: "false"
+ 
+alfresco-infrastructure:
+  alfresco-identity-service:
+    enabled: true

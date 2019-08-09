@@ -84,6 +84,7 @@ nginx-ingress:
     create: true
   config:
     ssl-redirect: "false"
+    server-tokens: "false"
   controller:
     scope:
       enabled: true
@@ -125,6 +126,7 @@ nginx-ingress:
   controller:
     config:
       ssl-redirect: "false"
+      server-tokens: "false"
     scope:
       enabled: true
     publishService:
@@ -187,6 +189,7 @@ nginx-ingress:
   controller:
     config:
       ssl-redirect: "false"
+      server-tokens: "false"
     scope:
       enabled: true
     publishService:
@@ -228,6 +231,13 @@ The following table lists the configurable parameters of the infrastructure char
 | `persistence.efs.enabled`                                   | Use efs persistence.                                 | `false`                                             |
 | `persistence.efs.dns`                                       | Elastic File System DNS address                      | `none`                                              |
 | `persistence.efs.path`                                      | Path into the EFS mount to be used.                  | `/`                                                 |
+| `persistence.azureFile.enabled`                             | Use Azure File persistence                           | `false`                                             |
+| `persistence.azureFile.secretName`                          | Azure secret Name for the azure file volume          | ``                                                  |
+| `persistence.azureFile.shareName`                           | Azure share Name for the azure file volume           | ``                                                  |
+| `persistence.azureFile.shareNamespace`                      | Azure share Namespace for the azure file volume      | ``                                                  |
+| `persistence.storageClass.enabled`                          | Use custom Storage Class persistence                 | `false`                                             |
+| `persistence.storageClass.name`                             | Storage Class Name                                   | `nfs`                                               |
+| `persistence.storageClass.accessModes`                      | Access modes for the volume                          | `[ReadWriteMany]`                                   |
 | `alfresco-infrastructure.activemq.enabled`                  | Activemq is enabled for this chart                   | `true`                                              |
 | `alfresco-infrastructure.alfresco-identity-service.enabled` | Alfresco Identity Service is enabled for this chart  | `true`                                              |
 | `alfresco-infrastructure.nginx-ingress.enabled`             | Nginx-ingress is enabled for this chart              | `true`                                              |
