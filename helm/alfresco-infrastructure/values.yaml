@@ -30,3 +30,7 @@ nginx-ingress:
 alfresco-infrastructure:
   alfresco-identity-service:
     enabled: true
+  activemq:
+    enabled: true
+  nginx-ingress:
+    enabled: true
