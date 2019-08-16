@@ -33,6 +33,19 @@ Create an EFS storage on AWS and make sure it is in the same VPC as your cluster
 export NFSSERVER=fs-d660549f.efs.us-east-1.amazonaws.com
 ```
 
+Then install a nfs client service to create a dynamic storage class in kubernetes.
+This can be used by multiple deployments.
+
+```bash
+helm install stable/nfs-client-provisioner \
+--name $DESIREDNAMESPACE \
+--set nfs.server="$NFSSERVER" \
+--set nfs.path="/" \
+--set storageClass.reclaimPolicy="Retain" \
+--set storageClass.name="$DESIREDNAMESPACE-sc" \
+--namespace $DESIREDNAMESPACE
+```
+
 ***Note!***
 The Persistent volume created with NFS to store the data on the created EFS has the [ReclaimPolicy](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#reclaim-policy) set to Recycle.
 This means that by default, when you delete the release the saved data is deleted automatically.
@@ -47,10 +60,9 @@ To change this behaviour and keep the data you can set the persistence.reclaimPo
 helm repo add alfresco-incubator https://kubernetes-charts.alfresco.com/incubator
 helm repo add alfresco-stable https://kubernetes-charts.alfresco.com/stable
 
-
 helm install alfresco-incubator/alfresco-infrastructure \
---set persistence.efs.enabled=true \
---set persistence.efs.dns="$NFSSERVER" \
+--set persistence.storageClass.enabled=true \
+--set persistence.storageClass.name="$DESIREDNAMESPACE-sc" \
 --namespace $DESIREDNAMESPACE
 ```
 
@@ -227,14 +239,6 @@ The following table lists the configurable parameters of the infrastructure char
 | --------------------------------------------------------    | --------------------------------------------------   | --------------------------------------------------- |
 | `persistence.enabled`                                       | Persistence is enabled for this chart                | `true`                                              |
 | `persistence.baseSize`                                      | Size of the persistent volume.                       | `20Gi`                                              |
-| `persistence.reclaimPolicy`                                 | Policy for keeping or removing the data after helm delete. Use Retain to keep the data. | `Recycle`        |
-| `persistence.efs.enabled`                                   | Use efs persistence.                                 | `false`                                             |
-| `persistence.efs.dns`                                       | Elastic File System DNS address                      | `none`                                              |
-| `persistence.efs.path`                                      | Path into the EFS mount to be used.                  | `/`                                                 |
-| `persistence.azureFile.enabled`                             | Use Azure File persistence                           | `false`                                             |
-| `persistence.azureFile.secretName`                          | Azure secret Name for the azure file volume          | ``                                                  |
-| `persistence.azureFile.shareName`                           | Azure share Name for the azure file volume           | ``                                                  |
-| `persistence.azureFile.shareNamespace`                      | Azure share Namespace for the azure file volume      | ``                                                  |
 | `persistence.storageClass.enabled`                          | Use custom Storage Class persistence                 | `false`                                             |
 | `persistence.storageClass.name`                             | Storage Class Name                                   | `nfs`                                               |
 | `persistence.storageClass.accessModes`                      | Access modes for the volume                          | `[ReadWriteMany]`                                   |
@@ -246,7 +250,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```bash
 $ helm install --name my-release \
-  --set persistence.efs.enabled=true \
+  --set persistence.enabled=true \
     alfresco-incubator/alfresco-infrastructure
 ```
 
