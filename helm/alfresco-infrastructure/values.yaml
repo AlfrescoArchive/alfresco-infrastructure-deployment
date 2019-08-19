@@ -22,5 +22,7 @@ alfresco-infrastructure:
     enabled: true
   activemq:
     enabled: true
+  alfresco-event-gateway:
+    enabled: true
   nginx-ingress:
     enabled: true
