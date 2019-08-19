@@ -41,16 +41,16 @@ helm install stable/nfs-client-provisioner \
 --name $DESIREDNAMESPACE \
 --set nfs.server="$NFSSERVER" \
 --set nfs.path="/" \
---set storageClass.reclaimPolicy="Retain" \
+--set storageClass.reclaimPolicy="Delete" \
 --set storageClass.name="$DESIREDNAMESPACE-sc" \
 --namespace $DESIREDNAMESPACE
 ```
 
 ***Note!***
-The Persistent volume created with NFS to store the data on the created EFS has the [ReclaimPolicy](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#reclaim-policy) set to Recycle.
+The Persistent volume created with NFS to store the data on the created EFS has the [ReclaimPolicy](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#reclaim-policy) set to Delete.
 This means that by default, when you delete the release the saved data is deleted automatically.
 
-To change this behaviour and keep the data you can set the persistence.reclaimPolicy value to Retain.
+To change this behaviour and keep the data you can set the storageClass.reclaimPolicy value to Retain.
 
 ## Installing the chart
 
