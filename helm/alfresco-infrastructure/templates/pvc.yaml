@@ -1,37 +1,21 @@
 {{- if .Values.persistence.enabled -}}
-{{- if .Values.persistence.efs.enabled }}
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: efs-{{ template "alfresco-infrastructure.fullname" . }}
-provisioner: alfresco.com/efs
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: pv-{{ template "alfresco-infrastructure.fullname" . }}
-spec:
-  capacity:
-    storage: {{ .Values.persistence.baseSize | quote }}
-  accessModes:
-    - ReadWriteMany
-  persistentVolumeReclaimPolicy: {{ .Values.persistence.reclaimPolicy | default "Recycle" }}
-  nfs:
-    server: "{{ .Values.persistence.efs.dns }}"
-    path: "{{ .Values.persistence.efs.path }}"
-  storageClassName: efs-{{ template "alfresco-infrastructure.fullname" . }}
----
-{{- end }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: alfresco-volume-claim
 spec:
+  {{ if .Values.persistence.storageClass.enabled }}
   accessModes:
-  {{ if .Values.persistence.efs.enabled }}
+  {{- range .Values.persistence.storageClass.accessModes }}
+    - {{ . }}
+  {{- end }}
+  storageClassName: {{ .Values.persistence.storageClass.name }}
+  {{ else if or .Values.persistence.efs.enabled .Values.persistence.azureFile.enabled }}
+  accessModes:
     - ReadWriteMany
-  storageClassName: efs-{{ template "alfresco-infrastructure.fullname" . }}
+  storageClassName: {{ template "alfresco-infrastructure.fullname" . }}
   {{ else }}
+  accessModes:
     - ReadWriteOnce
   {{ end }}
   resources:
