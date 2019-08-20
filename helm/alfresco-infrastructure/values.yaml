@@ -6,16 +6,6 @@ persistence:
     accessModes:
       - ReadWriteMany
     name: "nfs-client" #Custom storage classs name
-  efs:
-    enabled: false
-    dns: fs-example.efs.us-east-1.amazonaws.com #For aws you will need to specify the EFS server
-    path: "/"
-  azureFile:
-    enabled: false
-    secretName: ""
-    shareName: ""
-    # In case the secret is stored in a different namespace
-    shareNamespace: ""
 
 nginx-ingress:
   rbac:
@@ -30,7 +20,9 @@ nginx-ingress:
 alfresco-infrastructure:
   alfresco-identity-service:
     enabled: true
+  activemq:
+    enabled: true
   alfresco-event-gateway:
     enabled: true
-  activemq:
+  nginx-ingress:
     enabled: true

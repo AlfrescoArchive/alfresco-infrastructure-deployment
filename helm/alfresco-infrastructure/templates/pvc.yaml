@@ -4,17 +4,12 @@ apiVersion: v1
 metadata:
   name: alfresco-volume-claim
 spec:
-  accessModes:
   {{ if .Values.persistence.storageClass.enabled }}
   accessModes:
   {{- range .Values.persistence.storageClass.accessModes }}
     - {{ . }}
   {{- end }}
   storageClassName: {{ .Values.persistence.storageClass.name }}
-  {{ else if or .Values.persistence.efs.enabled .Values.persistence.azureFile.enabled }}
-  accessModes:
-    - ReadWriteMany
-  storageClassName: {{ template "alfresco-infrastructure.fullname" . }}
   {{ else }}
   accessModes:
     - ReadWriteOnce
