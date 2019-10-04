@@ -59,6 +59,7 @@ To change this behaviour and keep the data you can set the storageClass.reclaimP
 
 helm repo add alfresco-incubator https://kubernetes-charts.alfresco.com/incubator
 helm repo add alfresco-stable https://kubernetes-charts.alfresco.com/stable
+helm repo add codecentric https://codecentric.github.io/helm-charts
 
 helm install alfresco-incubator/alfresco-infrastructure \
 --set persistence.storageClass.enabled=true \
