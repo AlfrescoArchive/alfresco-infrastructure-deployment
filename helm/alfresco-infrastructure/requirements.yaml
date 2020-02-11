@@ -6,7 +6,7 @@ dependencies:
   - name: alfresco-identity-service
     version: 2.0.0
     condition: alfresco-infrastructure.alfresco-identity-service.enabled
-    repository: https://kubernetes-charts.alfresco.com/incubator
+    repository: https://kubernetes-charts.alfresco.com/stable
   - name: nginx-ingress
     condition: alfresco-infrastructure.nginx-ingress.enabled
     repository: https://kubernetes-charts.storage.googleapis.com/
